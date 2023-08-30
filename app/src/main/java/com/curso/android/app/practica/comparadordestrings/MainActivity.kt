@@ -1,5 +1,6 @@
 package com.curso.android.app.practica.comparadordestrings
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -25,8 +26,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.comparisonResult.observe(this, { result ->
-            // Aquí puedes mostrar el resultado en función de 'result'
-            // Por ejemplo: showToast("Los textos son iguales: $result")
+            if (result) {
+                binding.resultTextView.setTextColor(Color.GREEN)
+                binding.resultTextView.text = "Ambos textos coinciden"
+            } else {
+                binding.resultTextView.setTextColor(Color.RED)
+                binding.resultTextView.text = "Los textos no coinciden"
+            }
         })
     }
 }

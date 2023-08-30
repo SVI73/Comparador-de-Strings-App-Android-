@@ -1,34 +1,43 @@
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.curso.android.app.practica.comparadordestrings.MainActivity
-import com.curso.android.app.practica.comparadordestrings.R
+import androidx.lifecycle.Observer
+import androidx.test.ext.junit.rules.InstantTaskExecutorRule
+import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+class TextComparisonViewModelTest {
 
     @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Test
-    fun testUIElements() {
-        onView(withId(R.id.editText1)).check(matches(isDisplayed()))
-        onView(withId(R.id.editText2)).check(matches(isDisplayed()))
-        onView(withId(R.id.compareButton)).check(matches(isDisplayed()))
+    private lateinit var viewModel: TextComparisonViewModel
+
+    private lateinit var comparisonResultObserver: Observer<Boolean>
+
+    @Before
+    fun setup() {
+        viewModel = TextComparisonViewModel()
+        comparisonResultObserver = Observer {}
+        viewModel.comparisonResult.observeForever(comparisonResultObserver)
     }
 
     @Test
-    fun testTextComparison() {
-        onView(withId(R.id.editText1)).perform(typeText("hello"), closeSoftKeyboard())
-        onView(withId(R.id.editText2)).perform(typeText("world"), closeSoftKeyboard())
-        onView(withId(R.id.compareButton)).perform(click())
+    fun testCompareTextsEqual() {
+        val text1 = "hello"
+        val text2 = "hello"
 
-        // Verificar el resultado aquí usando onView(...)
+        viewModel.compareTexts(text1, text2)
+
+        assertEquals(true, viewModel.comparisonResult.value)
+    }
+
+    @Test
+    fun testCompareTextsNotEqual() {
+        val text1 = "hello"
+        val text2 = "world"
+
+        viewModel.compareTexts(text1, text2)
+
+        assertEquals(false, viewModel.comparisonResult.value)
     }
 }
