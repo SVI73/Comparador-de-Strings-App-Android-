@@ -1,5 +1,6 @@
 import androidx.lifecycle.Observer
-import androidx.test.ext.junit.rules.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.curso.android.app.practica.comparadordestrings.TextComparisonViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
